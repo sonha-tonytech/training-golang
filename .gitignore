@@ -1,0 +1,21 @@
+# Ignore .env file
+.env
+
+# Ignore Go binary files
+/bin/
+/build/
+/dist/
+/*.exe
+/*.out
+/*.test
+
+# Ignore IDE settings (Visual Studio Code, GoLand, etc.)
+.vscode/
+/.idea/
+
+# Ignore dependency directories (if using Go modules)
+vendor/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
