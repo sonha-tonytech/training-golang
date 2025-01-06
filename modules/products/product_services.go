@@ -4,22 +4,23 @@ import (
 	"database/sql"
 	"fmt"
 	"my-pp/modules/users"
+	"my-pp/share/variables"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func CreateItem(db *sql.DB, id, title, text, userId string, updateAt time.Time) (ItemData, error) {
+func CreateItem(id, title, text, userId string, updateAt time.Time) (ItemData, error) {
 	query := "INSERT INTO golang_crud.list (id, title, text, updated_at, user_id) VALUES (?, ?, ?, ?, ?)"
-	_, err := db.Exec(query, id, title, text, updateAt, userId)
+	_, err := variables.DB.Exec(query, id, title, text, updateAt, userId)
 	if err != nil {
 		return ItemData{}, err
 	}
 
-	return GetItemById(db, id)
+	return GetItemById(id)
 }
 
-func GetItems(db *sql.DB, start, limit int) ([]ItemData, error) {
+func GetItems(start, limit int) ([]ItemData, error) {
 	query := `SELECT 
 				l.id, l.title, l.text, l.updated_at, l.user_id,
 				u.id, u.name, u.user_name, u.password
@@ -28,7 +29,7 @@ func GetItems(db *sql.DB, start, limit int) ([]ItemData, error) {
 			  ORDER BY l.updated_at desc
 			  LIMIT ? OFFSET ?`
 
-	rows, err := db.Query(query, limit, start)
+	rows, err := variables.DB.Query(query, limit, start)
 	if err != nil {
 		return nil, err
 	}
@@ -75,13 +76,13 @@ func GetItems(db *sql.DB, start, limit int) ([]ItemData, error) {
 
 	return data, nil
 }
-func GetItemById(db *sql.DB, itemId string) (ItemData, error) {
+func GetItemById(itemId string) (ItemData, error) {
 	query := `SELECT l.id, l.title, l.text, l.updated_at, l.user_id,
 				u.id, u.name, u.user_name, u.password 
 			  FROM golang_crud.list l
 			  LEFT JOIN golang_crud.user u ON l.user_id = u.id
 			  WHERE l.id = ?`
-	row := db.QueryRow(query, itemId)
+	row := variables.DB.QueryRow(query, itemId)
 
 	var item ItemData
 	var updatedAt string
@@ -112,24 +113,24 @@ func GetItemById(db *sql.DB, itemId string) (ItemData, error) {
 	return item, nil
 }
 
-func UpdateItem(db *sql.DB, id, title, text string) (ItemData, error) {
+func UpdateItem(id, title, text string) (ItemData, error) {
 	query := "UPDATE golang_crud.list SET title = ?, text = ? WHERE id = ?"
-	_, err := db.Exec(query, title, text, id)
+	_, err := variables.DB.Exec(query, title, text, id)
 	if err != nil {
 		return ItemData{}, err
 	}
 
-	return GetItemById(db, id)
+	return GetItemById(id)
 }
 
-func DeleteItem(db *sql.DB, id string) (ItemData, error) {
-	item, err := GetItemById(db, id)
+func DeleteItem(id string) (ItemData, error) {
+	item, err := GetItemById(id)
 	if err != nil {
 		return ItemData{}, err
 	}
 
 	query := "DELETE FROM golang_crud.list WHERE id = ?"
-	_, err = db.Exec(query, id)
+	_, err = variables.DB.Exec(query, id)
 	if err != nil {
 		return ItemData{}, err
 	}

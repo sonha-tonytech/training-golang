@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"my-pp/modules/products"
@@ -12,6 +12,9 @@ func SetupRoutes() *mux.Router {
 
 	products.ListRoutes(r)
 	users.UserRoutes(r)
+
+	r.Use(RecoverMiddleware)
+	r.Use(LoggingMiddleware)
 
 	return r
 }

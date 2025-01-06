@@ -1,0 +1,19 @@
+development:
+  dialect: mysql
+  datasource: "root:letmein@tcp(localhost:3306)/golang_crud?parseTime=true"
+  log_queries: true
+  user: root
+  password: letmein
+  host: localhost
+  port: 3306
+  database: golang_crud
+
+production:
+  dialect: mysql
+  datasource: "root:letmein@tcp(localhost:3306)/golang_crud?parseTime=true"
+  user: root
+  password: letmein
+  host: localhost
+  port: 3306
+  database: golang_crud
+  log_queries: false

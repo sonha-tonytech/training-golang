@@ -2,7 +2,6 @@ package users
 
 import (
 	"encoding/json"
-	"my-pp/share/variables"
 	"net/http"
 	"time"
 
@@ -26,7 +25,7 @@ func getUserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	userName := r.URL.Query().Get("userName")
 	password := r.URL.Query().Get("password")
 
-	user, err := GetUserLogin(variables.DB, userName, password)
+	user, err := GetUserLogin(userName, password)
 	if err != nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 		return
@@ -58,7 +57,7 @@ func registerUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	registerUser, err := RegisterUser(variables.DB, id.String(), user.Body.Name, user.Body.UserName, user.Body.Password)
+	registerUser, err := RegisterUser(id.String(), user.Body.Name, user.Body.UserName, user.Body.Password)
 	if err != nil {
 		http.Error(w, "Failed to register user", http.StatusInternalServerError)
 		return
@@ -85,7 +84,7 @@ func updateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updatedItem, err := UpdateUser(variables.DB, idStr, user.Name, user.Password)
+	updatedItem, err := UpdateUser(idStr, user.Name, user.Password)
 	if err != nil {
 		http.Error(w, "User not found or failed to update", http.StatusNotFound)
 		return

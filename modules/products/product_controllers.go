@@ -2,7 +2,6 @@ package products
 
 import (
 	"encoding/json"
-	"my-pp/share/variables"
 	"net/http"
 	"strconv"
 
@@ -22,7 +21,7 @@ func createItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	createdItem, err := CreateItem(variables.DB, id.String(), item.Body.Title, item.Body.Text, item.Body.UserId, item.Body.UpdateAt)
+	createdItem, err := CreateItem(id.String(), item.Body.Title, item.Body.Text, item.Body.UserId, item.Body.UpdateAt)
 	if err != nil {
 		http.Error(w, "Failed to create item", http.StatusInternalServerError)
 		return
@@ -53,7 +52,7 @@ func getItemsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	items, err := GetItems(variables.DB, start, limit)
+	items, err := GetItems(start, limit)
 	if err != nil {
 		http.Error(w, "Data not found", http.StatusNotFound)
 		return
@@ -71,7 +70,7 @@ func getItemByIdHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	itemId := vars["id"]
 
-	item, err := GetItemById(variables.DB, itemId)
+	item, err := GetItemById(itemId)
 	if err != nil {
 		http.Error(w, "Data not found", http.StatusNotFound)
 		return
@@ -96,7 +95,7 @@ func updateItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	updatedItem, err := UpdateItem(variables.DB, idStr, item.Body.Title, item.Body.Text)
+	updatedItem, err := UpdateItem(idStr, item.Body.Title, item.Body.Text)
 	if err != nil {
 		http.Error(w, "Item not found or failed to update", http.StatusNotFound)
 		return
@@ -115,7 +114,7 @@ func deleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
 
-	item, err := DeleteItem(variables.DB, idStr)
+	item, err := DeleteItem(idStr)
 	if err != nil {
 		http.Error(w, "Item not found or could not be deleted", http.StatusNotFound)
 		return

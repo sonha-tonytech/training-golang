@@ -5,7 +5,9 @@ import (
 	"my-pp/share/utils"
 	"my-pp/share/variables"
 	"net/http"
+	"time"
 
+	"github.com/go-co-op/gocron"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -19,8 +21,18 @@ func main() {
 
 	variables.DB = db
 
+	err = utils.LoadConfig()
+	if err != nil {
+		log.Fatalf("Error loading config: %v", err)
+	}
+
+	//Add cronjob backup db
+	s := gocron.NewScheduler(time.Local)
+	s.Every(1).Day().At("07:00").Do(utils.BackupDatabase)
+	s.StartAsync()
+
 	// Create a new router
-	r := SetupRoutes()
+	r := utils.SetupRoutes()
 
 	// Start the HTTP server on port 3000
 	log.Println("Server listening on :3000")
