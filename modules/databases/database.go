@@ -1,4 +1,4 @@
-package utils
+package databases
 
 import (
 	"database/sql"
@@ -101,7 +101,7 @@ func RemoveOldBackups(dir string, days int) error {
 }
 
 func BackupDatabase() {
-	backupDir := "/Users/Tony/Documents/my-golang-app/backup"
+	backupDir := "./backup"
 	date := time.Now().Format("2006-01-02")
 	backupFile := filepath.Join(backupDir, fmt.Sprintf("backup_%s.sql", date))
 

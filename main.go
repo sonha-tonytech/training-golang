@@ -2,7 +2,8 @@ package main
 
 import (
 	"log"
-	"my-pp/share/utils"
+	"my-pp/modules/databases"
+	"my-pp/modules/routes"
 	"my-pp/share/variables"
 	"net/http"
 	"time"
@@ -13,7 +14,7 @@ import (
 
 func main() {
 	//Connect to database
-	db, err := utils.OpenDatabase()
+	db, err := databases.OpenDatabase()
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
 	}
@@ -21,18 +22,18 @@ func main() {
 
 	variables.DB = db
 
-	err = utils.LoadConfig()
+	err = databases.LoadConfig()
 	if err != nil {
 		log.Fatalf("Error loading config: %v", err)
 	}
 
 	//Add cronjob backup db
 	s := gocron.NewScheduler(time.Local)
-	s.Every(1).Day().At("07:00").Do(utils.BackupDatabase)
+	s.Every(1).Day().At("07:00").Do(databases.BackupDatabase)
 	s.StartAsync()
 
 	// Create a new router
-	r := utils.SetupRoutes()
+	r := routes.SetupRoutes()
 
 	// Start the HTTP server on port 3000
 	log.Println("Server listening on :3000")

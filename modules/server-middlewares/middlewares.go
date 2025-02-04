@@ -1,4 +1,4 @@
-package utils
+package servermiddlewares
 
 import (
 	"log"
@@ -23,7 +23,6 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 
 		lrw := &loggingResponseWriter{
 			ResponseWriter: w,
-			statusCode:     http.StatusOK,
 		}
 
 		next.ServeHTTP(lrw, r)

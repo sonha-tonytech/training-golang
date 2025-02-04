@@ -59,7 +59,7 @@ func getItemsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(items)
 	if err != nil {
 		http.Error(w, "Failed to encode data", http.StatusInternalServerError)
@@ -77,7 +77,7 @@ func getItemByIdHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(item)
 	if err != nil {
 		http.Error(w, "Failed to encode data", http.StatusInternalServerError)
@@ -121,7 +121,7 @@ func deleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
+	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(item)
 	if err != nil {
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
